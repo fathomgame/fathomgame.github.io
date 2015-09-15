@@ -92,6 +92,7 @@ var gameTimer;
 var gameTime = 99;
 var timerText;
 var textColor = "#27d";
+var loadingText;
 // var introText;
 // var introCharSize = 7.5;
 
@@ -406,7 +407,7 @@ function lightDeath(i)
         lightsAnimation[i].alpha = lightAlpha;
     }
     score++;
-    scoreText.text = "Lights: " + score.toString();
+    scoreText.text = "Lights Found: " + score.toString() + "/" + eInit.NUM_LIGHTS.toString();
     switch (currLevel) {
         case 1:
             currLevel++;
