@@ -178,12 +178,12 @@ window.onload = function()
         {id: 'anglerSprite1', src: 'assets/angler1.png'},
         {id: 'anglerSprite2', src: 'assets/angler2.png'},
     // music
-        {id: 'backgroundMusic', src: 'assets/music.mp3'},
-        {id: 'gameOverMusic', src: 'assets/game_over.mp3'},
-    // sfx
-        {id: 'shot', src: 'assets/shot.mp3'},
-        {id: 'gameOverSound', src: 'assets/gameOver.mp3'},
-        {id: 'deathSound', src: 'assets/die.mp3'},
+    //     {id: 'backgroundMusic', src: 'assets/music.mp3'},
+    //     {id: 'gameOverMusic', src: 'assets/game_over.mp3'},
+    // // sfx
+    //     {id: 'shot', src: 'assets/shot.mp3'},
+    //     {id: 'gameOverSound', src: 'assets/gameOver.mp3'},
+    //     {id: 'deathSound', src: 'assets/die.mp3'},
     ]);
     queue.load();
 
