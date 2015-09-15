@@ -6,15 +6,18 @@ var HEIGHT = 800;
 var mouseXPosition;
 var mouseYPosition;
 var stage;
-var waitForSpace = true;
-var beginCollisions = false;
-var endscene = false;
-var winscene = false;
 var eInit = Object.freeze( {
     NUM_LIGHTS: 6
 });
 var numLights = eInit.NUM_LIGHTS;
 var numAnglers = 12;
+
+// bools
+var qLoaded = false;
+var waitForSpace = true;
+var beginCollisions = false;
+var endscene = false;
+var winscene = false;
 
 // var nobodySpriteSheet;
 // var nobodyDeathSpriteSheet;
@@ -208,6 +211,8 @@ window.onload = function()
 
 function queueLoaded(event)
 {
+    qLoaded = true;
+    
     // Add background images
     var backgroundImage = new createjs.Bitmap(queue.getResult("backgroundImage"));
     backgroundImage.alpha = backgroundAlpha;
@@ -636,6 +641,8 @@ function youWin() {
  *      Handle keyboard presses
  */
 function handleKeyDown(event) {
+        if ( qLoaded == false ) return;
+    
         switch(event.keyCode) {
             case KEYCODE_LEFT:  
                 console.log("LEFT");
