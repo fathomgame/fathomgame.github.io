@@ -125,27 +125,6 @@ window.onload = function()
     context.canvas.width = WIDTH;
     context.canvas.height = HEIGHT;
     stage = new createjs.Stage("myCanvas");
-    
-
-    /*
-     *		Create a circle and tween it
-     *
-     */
-	// var circle = new createjs.Shape();
-	// circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
-	// circle.x = 100;
-	// circle.y = 100;
-	// stage.addChild(circle);
-
-	// createjs.Tween.get(circle, { loop: true })
-	//   .to({ x: 400, y: 175, alpha: 0 }, 1000, createjs.Ease.getPowOut(4))
-	//   .to({ alpha: 1, y: 0 }, 500, createjs.Ease.getPowIn(2))
-	//   .to({ x: 0 }, 800, createjs.Ease.getPowInOut(2));
-
-	// createjs.Ticker.setFPS(60);
-	// createjs.Ticker.addEventListener("tick", stage);
-
-	// stage.update(); // only use if not tweening, tweens have their own update function
 
     /*
      *      Set up the Asset Queue and load sounds
@@ -261,14 +240,6 @@ function queueLoaded(event)
     timerText.x = WIDTH-230;
     timerText.y = 10;
     stage.addChild(timerText);
-    
-    // add intro text
-    // var intro = "up, down, left, right will help you to find your lights... but beware...";
-    // introText = new createjs.Text(intro,  "30px 'Special Elite'", "#16c");
-    // introText.x = WIDTH/2 - intro.length*introCharSize;
-    // introText.y = HEIGHT*0.7;
-    // stage.addChild(introText);
-    
 
     // Play background sound
     createjs.Sound.play("backgroundMusic", {loop: -1});
@@ -276,27 +247,6 @@ function queueLoaded(event)
     // Create nobody spritesheet
     // nobodySpriteSheet = new createjs.SpriteSheet({
     //     "images": [queue.getResult('nobodySpritesheet')],
-    //     "frames": {"width": 198, "height": 117},
-    //     "animations": { "swim": [0,4] }
-    // });
-
-    // Create nobody death spritesheet
-    // nobodyDeathSpriteSheet = new createjs.SpriteSheet({
-    // 	"images": [queue.getResult('nobodyDeath')],
-    // 	"frames": {"width": 198, "height" : 148},
-    // 	"animations": {"die": [0,7, false,1 ] }
-    // });
-
-    // Create light spritesheet
-    // lightSpriteSheet = new createjs.SpriteSheet({
-    //     "images": [queue.getResult('lightSpritesheet')],
-    //     "frames": {"width": 198, "height": 117},
-    //     "animations": { "swim": [0,4] }
-    // });
-
-    // Create angler spritesheet
-    // anglerSpriteSheet = new createjs.SpriteSheet({
-    //     "images": [queue.getResult('anglerSpritesheet')],
     //     "frames": {"width": 198, "height": 117},
     //     "animations": { "swim": [0,4] }
     // });
@@ -312,22 +262,21 @@ function queueLoaded(event)
     createjs.Ticker.addEventListener('tick', stage);
 
     // Set up events AFTER the game is loaded
-   	// window.onmousemove = handleMouseMove;
     window.onmousedown = handleMouseDown;
 }
 
 function createNobody()
 {
 	// animation = new createjs.Sprite(nobodySprite, "swim");
- //    animation.regX = eBounds.NOBODY_WIDTH/2;
- //    animation.regY = eBounds.NOBODY_HEIGHT/2;
- //    animation.x = nobodyXPos;
- //    animation.y = nobodyYPos;
- //    animation.width = eBounds.NOBODY_WIDTH;
- //    animation.height = eBounds.NOBODY_HEIGHT;
- //    animation.alpha = nobodyAlpha;
- //    animation.gotoAndPlay("swim");
- //    stage.addChildAt(animation, eDepths.NOBODY);
+    // animation.regX = eBounds.NOBODY_WIDTH/2;
+    // animation.regY = eBounds.NOBODY_HEIGHT/2;
+    // animation.x = nobodyXPos;
+    // animation.y = nobodyYPos;
+    // animation.width = eBounds.NOBODY_WIDTH;
+    // animation.height = eBounds.NOBODY_HEIGHT;
+    // animation.alpha = nobodyAlpha;
+    // animation.gotoAndPlay("swim");
+    // stage.addChildAt(animation, eDepths.NOBODY);
 
     animation = new createjs.Bitmap(queue.getResult("nobodySprite"));
     animation.regX = eBounds.NOBODY_WIDTH/2;
@@ -454,9 +403,8 @@ function tickEvent()
         animation.alpha += iBossAppearRate;
         return;
     }
-	/*
-     *      Nobody move & boundary logic
-     */
+    
+	// Nobody move & boundary logic
 	if(nobodyXPos < WIDTH && nobodyXPos > 0)
 	{
 		nobodyXPos += nobodyXSpeed;
@@ -479,10 +427,8 @@ function tickEvent()
     // animationHitbox.y = animation.y - eBounds.NOBODY_HEIGHT/2;
     // animationHitbox.alpha = 0;
 
-    /*
-     *      Lights move & boundary logic
-     */
-     for ( i = 0; i < numLights; ++i ) {
+    // Lights move & boundary logic
+	for ( i = 0; i < numLights; ++i ) {
         if(lightsAnimation[i].x < WIDTH && lightsAnimation[i].x > 0)
         {
             lightsAnimation[i].x += lightsXSpeed[i];
@@ -543,7 +489,6 @@ function tickEvent()
             rect1.y < rect2.y + rect2.height &&
             rect1.height + rect1.y > rect2.y)
         {
-            // console.log(animation.x, animation.y, animation.width, animation.height);
             // capture the light and nobody gets a clearer picture of who s/he is
             lightDeath(i);
             nobodyAlpha += iNobodyLightRate;
@@ -577,19 +522,6 @@ function tickEvent()
             }
         }
     }
-}
-
-function handleMouseDown(event)
-{
-    // //Display CrossHair
-    // crossHair = new createjs.Bitmap(queue.getResult("crossHair"));
-    // crossHair.x = event.clientX-45;
-    // crossHair.y = event.clientY-45;
-    // stage.addChild(crossHair);
-    // createjs.Tween.get(crossHair).to({alpha: 0},1000);
-    
-    // //Play Gunshot sound
-    // createjs.Sound.play("shot");
 }
 
 function updateTime()
@@ -689,7 +621,7 @@ function handleKeyDown(event) {
  *      Helper function that returns either a +1/-1
  */
 function plusOrMinus() {
-    var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+	var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
     return plusOrMinus;
 }
 
