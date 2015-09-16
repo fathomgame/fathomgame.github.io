@@ -46,13 +46,14 @@ var bgLevel2Alpha = 0.3;
 var bgLevel3Alpha = 0.3;
 var nobodyAlpha = 0.30;
 var lightAlpha = 0.05;
-var anglerAlpha = 0.05;
+var anglerAlpha = 0.03;
+var alphaRange = 0.07;
 
 // rates alpha
 var iBossAppearRate = 0.004;
 var iSunRate = 0.15;
 var iNobodyLightRate = 0.10;
-var iScareRate = 0.06;
+var iScareRate = 0.05;
 
 // animations (really just bitmap sprites)
 var animation;
@@ -74,10 +75,10 @@ var anglersXSpeed = [];
 var anglersYSpeed = [];
 
 var eSpeeds = Object.freeze( {
-    LIGHTS_X: 1.25,
+    LIGHTS_X: 1.75,
     LIGHTS_Y: 1.5, 
-    ANGLERS_X: 2.75, 
-    ANGLERS_Y: 2.5});
+    ANGLERS_X: 3.25, 
+    ANGLERS_Y: 2.75});
 
 // bitmap sizes
 var eBounds = Object.freeze( {
@@ -308,7 +309,7 @@ function createLights()
         lightsAnimation[i].y = Math.random()*HEIGHT;
         lightsAnimation[i].width = eBounds.LIGHT_WIDTH;
         lightsAnimation[i].height = eBounds.LIGHT_HEIGHT;
-        lightsAnimation[i].alpha = lightAlpha + lightAlpha*Math.random();
+        lightsAnimation[i].alpha = lightAlpha + alphaRange*Math.random();
         stage.addChildAt(lightsAnimation[i], eDepths.LIGHT);
     }
 }
@@ -329,7 +330,7 @@ function createAnglers()
         anglersAnimation[i].y = Math.random()*HEIGHT;
         anglersAnimation[i].width = eBounds.ANGLER_WIDTH;
         anglersAnimation[i].height = eBounds.ANGLER_HEIGHT;
-        anglersAnimation[i].alpha = anglerAlpha + anglerAlpha*Math.random();
+        anglersAnimation[i].alpha = anglerAlpha + alphaRange*Math.random();
         stage.addChildAt(anglersAnimation[i], eDepths.ANGLER);
     }
 }
@@ -685,8 +686,8 @@ function restartToMenu() {
 	level2.alpha = bgLevel2Alpha;
 	level3.alpha = bgLevel3Alpha;
 	animation.alpha = nobodyAlpha;
-	for ( i = 0; i < numLights; ++i ) { lightsAnimation[i].alpha = lightAlpha + lightAlpha * Math.random(); }
-	for ( i = 0; i < numAnglers; ++i ) { anglersAnimation[i].alpha = anglerAlpha + anglerAlpha * Math.random(); }	
+	for ( i = 0; i < numLights; ++i ) { lightsAnimation[i].alpha = lightAlpha + alphaRange*Math.random(); }
+	for ( i = 0; i < numAnglers; ++i ) { anglersAnimation[i].alpha = anglerAlpha + alphaRange*Math.random(); }	
 	
 	// reset positions
 	nobodyXPos = 100;
