@@ -547,7 +547,7 @@ function updateTime()
 function gameOver() {
 	// lock scene for a second
 	lockScene = true;
-	setTimeout( function() { lockScene = false; }, 2000 );
+	setTimeout( function() { lockScene = false; }, 1000 );
 	
     endscene = true;
     stage.removeChild(animation);
@@ -562,7 +562,7 @@ function gameOver() {
 function youWin() {
 	// lock scene for a second
 	lockScene = true;
-	setTimeout( function() { lockScene = false; }, 2000 );
+	setTimeout( function() { lockScene = false; }, 1000 );
 	
     winscene = true;
     timerText.text = "YOU WIN!!!";
@@ -615,7 +615,7 @@ function handleKeyDown(event) {
 				restartToMenu();
 					
 				// set a timeout before collisions can take place
-				setTimeout(function () { beginCollisions = true; console.log("collision ON"); }, 2000+5000);
+				setTimeout(function () { beginCollisions = true; console.log("collision ON"); }, 1000+5000);
 			}
 			break;
 
