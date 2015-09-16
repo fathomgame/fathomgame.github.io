@@ -194,6 +194,10 @@ window.onload = function()
 function queueLoaded(event)
 {
     qLoaded = true;
+	
+	// remove wait for assets to load msg
+	var elem = document.getElementById("waitLoad");
+	elem.parentNode.removeChild(elem);
     
     // Add background images
     var backgroundImage = new createjs.Bitmap(queue.getResult("backgroundImage"));
