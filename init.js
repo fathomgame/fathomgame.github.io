@@ -1,4 +1,5 @@
 // game attributes
+var gameFPS = 30;
 var context;
 var queue;
 var WIDTH = 1280;
@@ -154,7 +155,7 @@ window.onload = function()
         {id: "menu", src: "assets/menu.png"},
     // sprites
         {id: 'crossHair', src: 'assets/crosshair.png'},
-        // {id: 'nobodySpritesheet', src: 'assets/nobodySpritesheet.png'},
+        // {id: 'nobodySpritesheet', src: 'assets/firefly_spritesheet.png'},
         {id: 'nobodySprite', src: 'assets/nobody.png'},
         {id: 'nobodyDeath', src: 'assets/dead.png'},
         // {id: 'lightSpritesheet', src: 'assets/lightSpritesheet.png'},
@@ -231,9 +232,6 @@ function queueLoaded(event)
     level3 = new createjs.Bitmap(queue.getResult("level3"));
     level3.alpha = bgLevel3Alpha;
     stage.addChildAt(level3, 3)
-        // {id: "level1", src: "assets/level1.png"},
-        // {id: "level2", src: "assets/level2.png"},
-        // {id: "level3", src: "assets/level3.png"},
 
     //Add Score
     scoreText = new createjs.Text("Lights Found: " + score.toString() + "/" + eInit.NUM_LIGHTS.toString(), "36px Georgia", textColor);
@@ -253,8 +251,8 @@ function queueLoaded(event)
     // Create nobody spritesheet
     // nobodySpriteSheet = new createjs.SpriteSheet({
     //     "images": [queue.getResult('nobodySpritesheet')],
-    //     "frames": {"width": 198, "height": 117},
-    //     "animations": { "swim": [0,4] }
+    //     "frames": {"width": eBounds.NOBODY_WIDTH, "height": eBounds.NOBODY_HEIGHT},
+    //     "animations": { "swim": [0,6] }
     // });
 
     // Create nobody sprite
@@ -263,14 +261,14 @@ function queueLoaded(event)
     createAnglers();
 
     // Add ticker
-    createjs.Ticker.setFPS(30);
+    createjs.Ticker.setFPS(gameFPS);
     createjs.Ticker.addEventListener('tick', tickEvent);
     createjs.Ticker.addEventListener('tick', stage);
 }
 
 function createNobody()
 {
-	// animation = new createjs.Sprite(nobodySprite, "swim");
+	// animation = new createjs.Sprite(nobodySpriteSheet, "swim");
     // animation.regX = eBounds.NOBODY_WIDTH/2;
     // animation.regY = eBounds.NOBODY_HEIGHT/2;
     // animation.x = nobodyXPos;
@@ -697,7 +695,7 @@ function restartToMenu() {
 	nobodyXPos = 100;
 	nobodyYPos = 100;
 	nobodyXSpeed = 1.75;
-	nobodyYSpeed = -2.25;
+	nobodyYSpeed = 2.25;
 	
 	// reset timers and text
 	score = 0;
