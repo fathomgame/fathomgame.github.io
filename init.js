@@ -175,7 +175,7 @@ window.onload = function()
         {id: 'crossHair', src: 'assets/crosshair.png'},
         // {id: 'nobodySpritesheet', src: 'assets/nobodySpritesheet.png'},
         {id: 'nobodySprite', src: 'assets/nobody.png'},
-        {id: 'nobodyDeath', src: 'assets/nobodyDeath.png'},
+        {id: 'nobodyDeath', src: 'assets/dead.png'},
         // {id: 'lightSpritesheet', src: 'assets/lightSpritesheet.png'},
         {id: 'lightSprite', src: 'assets/light.png'},
         // {id: 'anglerSpritesheet', src: 'assets/anglerSpritesheet.png'},
@@ -281,11 +281,11 @@ function queueLoaded(event)
     // });
 
     // Create nobody death spritesheet
-    nobodyDeathSpriteSheet = new createjs.SpriteSheet({
-    	"images": [queue.getResult('nobodyDeath')],
-    	"frames": {"width": 198, "height" : 148},
-    	"animations": {"die": [0,7, false,1 ] }
-    });
+    // nobodyDeathSpriteSheet = new createjs.SpriteSheet({
+    // 	"images": [queue.getResult('nobodyDeath')],
+    // 	"frames": {"width": 198, "height" : 148},
+    // 	"animations": {"die": [0,7, false,1 ] }
+    // });
 
     // Create light spritesheet
     // lightSpriteSheet = new createjs.SpriteSheet({
@@ -389,17 +389,14 @@ function createAnglers()
 
 function nobodyDeath()
 {
-    stage.removeChild(animation);
-    deathAnimation = new createjs.Sprite(nobodyDeathSpriteSheet, "die");
+    deathAnimation = new createjs.Bitmap(queue.getResult("nobodyDeath"));
     deathAnimation.regX = eBounds.NOBODY_WIDTH/2;
     deathAnimation.regY = eBounds.NOBODY_HEIGHT/2;
     deathAnimation.x = nobodyXPos;
     deathAnimation.y = nobodyYPos;
     deathAnimation.alpha = nobodyAlpha;
-    deathAnimation.gotoAndPlay("die");
-    stage.addChild(deathAnimation);
+    stage.addChildAt(deathAnimation, eDepths.NOBODY);
     createjs.Sound.play("shot");
-    gameOver("GAME OVER! YOU LOSE!");
 }
 
 function lightDeath(i)
@@ -454,6 +451,7 @@ function tickEvent()
     {
         backgroundSun.alpha += iBossAppearRate;
         backgroundBlue.alpha += iBossAppearRate;
+        animation.alpha += iBossAppearRate;
         return;
     }
 	/*
@@ -575,7 +573,7 @@ function tickEvent()
             anglersAnimation[i].alpha += iScareRate;
             if ( anglersAnimation[i].alpha >= 1.0 )
             {
-                nobodyDeath();
+                gameOver();
             }
         }
     }
@@ -601,13 +599,11 @@ function updateTime()
 	gameTime--;
     if ( score >= eInit.NUM_LIGHTS )
     {
-        stage.removeChild(animation);
         youWin();
     }
 	else if ( gameTime <= 0 )
 	{
-		stage.removeChild(animation);
-        gameOver("GAME OVER! YOU LOSE!");
+        gameOver();
 	}
 	else
 	{
@@ -615,14 +611,15 @@ function updateTime()
 	}
 }
 
-function gameOver(msg) {
+function gameOver() {
     endscene = true;
+    stage.removeChild(animation);
+    nobodyDeath();
     timerText.text = "YOU LOSE";
     createjs.Sound.removeSound("backgroundMusic");
     createjs.Sound.play("deathSound");
     setTimeout(function() {createjs.Sound.play("gameOverSound")}, 1000);
     clearInterval(gameTimer);
-    // Play game over music
     createjs.Sound.play("gameOverMusic");
 }
 
@@ -630,12 +627,8 @@ function youWin() {
     winscene = true;
     timerText.text = "YOU WIN!!!";
     createjs.Sound.removeSound("backgroundMusic");
-    // createjs.Sound.play("deathSound");
-    // setTimeout(function() {createjs.Sound.play("gameOverSound")}, 1000);
     clearInterval(gameTimer);
-    // Play game over music
     createjs.Sound.play("gameOverMusic");
-    
 }
 
 /*
@@ -664,6 +657,8 @@ function handleKeyDown(event) {
                 
             case KEYCODE_SPACE:
                 console.log("SPACE");
+                
+                // block until space is pressed and game begins
                 if ( waitForSpace ) {
                     waitForSpace = false;
                     if ( menu ) {
@@ -676,16 +671,16 @@ function handleKeyDown(event) {
                 }
                 break;
               
-            // case KEYCODE_W:
-            //     if ( waitForSpace ) return;
-            //     console.log("W");
-            //     score = eInit.NUM_LIGHTS;
-            //     break;
-            // case KEYCODE_L:
-            //     if ( waitForSpace ) return;
-            //     console.log("L");
-            //     gameTime = 0;
-            //     break;
+            case KEYCODE_W:
+                if ( waitForSpace ) return;
+                console.log("W");
+                score = eInit.NUM_LIGHTS;
+                break;
+            case KEYCODE_L:
+                if ( waitForSpace ) return;
+                console.log("L");
+                gameTime = 0;
+                break;
         }
         // stage.update();
 }
