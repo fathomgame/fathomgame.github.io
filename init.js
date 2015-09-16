@@ -21,7 +21,7 @@ var endscene = false;
 var winscene = false;
 var lockScene = false;
 
-// var nobodySpriteSheet;
+var nobodySpriteSheet;
 // var nobodyDeathSpriteSheet;
 // var lightSpriteSheet;
 // var anglerSpriteSheet;
@@ -45,7 +45,7 @@ var bgBossAlpha = 0.02;
 var bgLevel1Alpha = 0.3;
 var bgLevel2Alpha = 0.3;
 var bgLevel3Alpha = 0.3;
-var nobodyAlpha = 0.30;
+var nobodyAlpha = 0.50;
 var lightAlpha = 0.05;
 var anglerAlpha = 0.03;
 var alphaRange = 0.07;
@@ -155,8 +155,8 @@ window.onload = function()
         {id: "menu", src: "assets/menu.png"},
     // sprites
         {id: 'crossHair', src: 'assets/crosshair.png'},
-        // {id: 'nobodySpritesheet', src: 'assets/firefly_spritesheet.png'},
-        {id: 'nobodySprite', src: 'assets/nobody.png'},
+        {id: 'nobodySpritesheet', src: 'assets/firefly_spritesheet.png'},
+        // {id: 'nobodySprite', src: 'assets/nobody.png'},
         {id: 'nobodyDeath', src: 'assets/dead.png'},
         // {id: 'lightSpritesheet', src: 'assets/lightSpritesheet.png'},
         {id: 'lightSprite', src: 'assets/light.png'},
@@ -169,7 +169,9 @@ window.onload = function()
     // sfx
         {id: 'shot', src: 'assets/shot.mp3'},
         {id: 'gameOverSound', src: 'assets/gameOver.mp3'},
-        {id: 'deathSound', src: 'assets/die.mp3'},
+        // {id: 'deathSound', src: 'assets/die.mp3'},
+		{id: 'deathSound2', src: 'assets/die_2.mp3'},
+		{id: 'deathSound3', src: 'assets/die_3.mp3'},
     ]);
     queue.load();
 
@@ -249,11 +251,11 @@ function queueLoaded(event)
     createjs.Sound.play("backgroundMusic", {loop: -1});
 
     // Create nobody spritesheet
-    // nobodySpriteSheet = new createjs.SpriteSheet({
-    //     "images": [queue.getResult('nobodySpritesheet')],
-    //     "frames": {"width": eBounds.NOBODY_WIDTH, "height": eBounds.NOBODY_HEIGHT},
-    //     "animations": { "swim": [0,6] }
-    // });
+    nobodySpriteSheet = new createjs.SpriteSheet({
+        "images": [queue.getResult('nobodySpritesheet')],
+        "frames": {"width": eBounds.NOBODY_WIDTH, "height": eBounds.NOBODY_HEIGHT},
+        "animations": { "swim": [0,0] }
+    });
 
     // Create nobody sprite
     createNobody();
@@ -268,18 +270,7 @@ function queueLoaded(event)
 
 function createNobody()
 {
-	// animation = new createjs.Sprite(nobodySpriteSheet, "swim");
-    // animation.regX = eBounds.NOBODY_WIDTH/2;
-    // animation.regY = eBounds.NOBODY_HEIGHT/2;
-    // animation.x = nobodyXPos;
-    // animation.y = nobodyYPos;
-    // animation.width = eBounds.NOBODY_WIDTH;
-    // animation.height = eBounds.NOBODY_HEIGHT;
-    // animation.alpha = nobodyAlpha;
-    // animation.gotoAndPlay("swim");
-    // stage.addChildAt(animation, eDepths.NOBODY);
-
-    animation = new createjs.Bitmap(queue.getResult("nobodySprite"));
+	animation = new createjs.Sprite(nobodySpriteSheet, "swim");
     animation.regX = eBounds.NOBODY_WIDTH/2;
     animation.regY = eBounds.NOBODY_HEIGHT/2;
     animation.x = nobodyXPos;
@@ -287,7 +278,18 @@ function createNobody()
     animation.width = eBounds.NOBODY_WIDTH;
     animation.height = eBounds.NOBODY_HEIGHT;
     animation.alpha = nobodyAlpha;
+    animation.gotoAndPlay("swim");
     stage.addChildAt(animation, eDepths.NOBODY);
+
+    // animation = new createjs.Bitmap(queue.getResult("nobodySprite"));
+    // animation.regX = eBounds.NOBODY_WIDTH/2;
+    // animation.regY = eBounds.NOBODY_HEIGHT/2;
+    // animation.x = nobodyXPos;
+    // animation.y = nobodyYPos;
+    // animation.width = eBounds.NOBODY_WIDTH;
+    // animation.height = eBounds.NOBODY_HEIGHT;
+    // animation.alpha = nobodyAlpha;
+    // stage.addChildAt(animation, eDepths.NOBODY);
 
     // animationHitbox = new createjs.Shape();
     // animationHitbox.graphics.beginStroke("#0f0").drawRect(
@@ -385,7 +387,7 @@ function lightDeath(i)
         default:
             break;
     }
-    createjs.Sound.play("deathSound");
+    createjs.Sound.play("deathSound2");
 }
 
 function tickEvent()
@@ -557,7 +559,7 @@ function gameOver() {
     nobodyDeath();
     timerText.text = "YOU LOSE";
     createjs.Sound.stop();
-    createjs.Sound.play("deathSound");
+    createjs.Sound.play("deathSound3");
     setTimeout(function() {createjs.Sound.play("gameOverSound")}, 1000);
     createjs.Sound.play("gameOverMusic");
 }
