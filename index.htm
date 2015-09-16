@@ -6,13 +6,17 @@
         <style>
             #mainDiv {
                 /*border: solid 1px #0f0;*/
+                
+                /* force mainDiv to fit to screen keeping aspect ratio */
+                width: 90vw; /* 90% of viewport width */
+                height: 56.25vw; /* ratio = 10/16 * 90 = 56/25 */
+                max-height: 90vh; /* 90% of viewport height */
+                max-width: 144vh; /* 16/10 * 90 = 144 */
+                
+                /* position mainDiv in the center of the window */
                 position: absolute;
-                width: 1280px;
-                height: 820px;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
+                top: 0; bottom: 0; /* vertical center */
+                left: 0; right: 0; /* horizontal center */
                 margin: auto;
             }
             
@@ -21,6 +25,8 @@
                 border: solid 1px #16c;
                 background: #000019;
                 position: relative;
+                width: 100%;
+                height: 99%;
             }
             
             body {

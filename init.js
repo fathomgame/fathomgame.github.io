@@ -125,6 +125,7 @@ window.onload = function()
     context.canvas.width = WIDTH;
     context.canvas.height = HEIGHT;
     stage = new createjs.Stage("myCanvas");
+    
 
     /*
      *		Create a circle and tween it
