@@ -617,20 +617,19 @@ function handleKeyDown(event) {
 				// set a timeout before collisions can take place
 				setTimeout(function () { beginCollisions = true; console.log("collision ON"); }, 2000+5000);
 			}
-
 			break;
 
-	// 	case KEYCODE_W:
-	// 		if (waitForSpace) return;
-	// 		console.log("W");
-	// 		score = eInit.NUM_LIGHTS;
-	// 		break;
-	// 	case KEYCODE_L:
-	// 		if (waitForSpace) return;
-	// 		console.log("L");
-	// 		gameTime = 0;
-	// 		break;
-	// }
+		// case KEYCODE_W:
+		// 	if (waitForSpace) return;
+		// 	console.log("W");
+		// 	score = eInit.NUM_LIGHTS;
+		// 	break;
+		// case KEYCODE_L:
+		// 	if (waitForSpace) return;
+		// 	console.log("L");
+		// 	gameTime = 0;
+		// 	break;
+	}
 }
 
 /*
