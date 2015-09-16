@@ -18,6 +18,7 @@ var waitForSpace = true;
 var beginCollisions = false;
 var endscene = false;
 var winscene = false;
+var lockScene = false;
 
 // var nobodySpriteSheet;
 // var nobodyDeathSpriteSheet;
@@ -95,7 +96,7 @@ var gameTimer;
 var gameTime = 99;
 var timerText;
 var textColor = "#27d";
-var loadingText;
+
 // var introText;
 // var introCharSize = 7.5;
 
@@ -260,9 +261,6 @@ function queueLoaded(event)
     createjs.Ticker.setFPS(30);
     createjs.Ticker.addEventListener('tick', tickEvent);
     createjs.Ticker.addEventListener('tick', stage);
-
-    // Set up events AFTER the game is loaded
-    window.onmousedown = handleMouseDown;
 }
 
 function createNobody()
@@ -390,6 +388,7 @@ function lightDeath(i)
 function tickEvent()
 {
     // don't handle collision or anything if game is in end scene (super annoying!)
+	if ( lockScene ) return;
     if ( waitForSpace ) return;
     if ( endscene )
     {
@@ -526,7 +525,9 @@ function tickEvent()
 
 function updateTime()
 {
+	if ( lockScene ) return;
     if ( waitForSpace ) return;
+	if ( endscene || winscene ) return;
 
 	gameTime--;
     if ( score >= eInit.NUM_LIGHTS )
@@ -544,22 +545,28 @@ function updateTime()
 }
 
 function gameOver() {
+	// lock scene for a second
+	lockScene = true;
+	setTimeout( function() { lockScene = false; }, 2000 );
+	
     endscene = true;
     stage.removeChild(animation);
     nobodyDeath();
     timerText.text = "YOU LOSE";
-    createjs.Sound.removeSound("backgroundMusic");
+    createjs.Sound.stop();
     createjs.Sound.play("deathSound");
     setTimeout(function() {createjs.Sound.play("gameOverSound")}, 1000);
-    clearInterval(gameTimer);
     createjs.Sound.play("gameOverMusic");
 }
 
 function youWin() {
+	// lock scene for a second
+	lockScene = true;
+	setTimeout( function() { lockScene = false; }, 2000 );
+	
     winscene = true;
     timerText.text = "YOU WIN!!!";
-    createjs.Sound.removeSound("backgroundMusic");
-    clearInterval(gameTimer);
+    createjs.Sound.stop();
     createjs.Sound.play("gameOverMusic");
 }
 
@@ -567,54 +574,63 @@ function youWin() {
  *      Handle keyboard presses
  */
 function handleKeyDown(event) {
-        if ( qLoaded == false ) return;
-    
-        switch(event.keyCode) {
-            case KEYCODE_LEFT:  
-                console.log("LEFT");
-                if ( nobodyXSpeed > 0 ) nobodyXSpeed *= -1;
-                break;
-            case KEYCODE_RIGHT: 
-                console.log("RIGHT");
-                if ( nobodyXSpeed < 0 ) nobodyXSpeed *= -1;
-                break;
-            case KEYCODE_UP: 
-                console.log("UP");
-                if ( nobodyYSpeed > 0 ) nobodyYSpeed *= -1;
-                break;
-            case KEYCODE_DOWN: 
-                console.log("DOWN");
-                if ( nobodyYSpeed < 0 ) nobodyYSpeed *= -1;
-                break;
-                
-            case KEYCODE_SPACE:
-                console.log("SPACE");
-                
-                // block until space is pressed and game begins
-                if ( waitForSpace ) {
-                    waitForSpace = false;
-                    if ( menu ) {
-                        stage.removeChild(menu);
-                        menu = null;
-                    }
+	if (lockScene) return;
+	if (qLoaded == false) return;
 
-                    // set a timeout before collisions can take place
-                    setTimeout(function() { beginCollisions = true; console.log("collision ON"); }, 5000);
-                }
-                break;
-              
-            case KEYCODE_W:
-                if ( waitForSpace ) return;
-                console.log("W");
-                score = eInit.NUM_LIGHTS;
-                break;
-            case KEYCODE_L:
-                if ( waitForSpace ) return;
-                console.log("L");
-                gameTime = 0;
-                break;
-        }
-        // stage.update();
+	switch (event.keyCode) {
+		case KEYCODE_LEFT:
+			console.log("LEFT");
+			if (nobodyXSpeed > 0) nobodyXSpeed *= -1;
+			break;
+		case KEYCODE_RIGHT:
+			console.log("RIGHT");
+			if (nobodyXSpeed < 0) nobodyXSpeed *= -1;
+			break;
+		case KEYCODE_UP:
+			console.log("UP");
+			if (nobodyYSpeed > 0) nobodyYSpeed *= -1;
+			break;
+		case KEYCODE_DOWN:
+			console.log("DOWN");
+			if (nobodyYSpeed < 0) nobodyYSpeed *= -1;
+			break;
+
+		case KEYCODE_SPACE:
+			console.log("SPACE");
+                
+			// block until space is pressed and game begins
+			if (waitForSpace) {
+				waitForSpace = false;
+				if (menu) {
+					stage.removeChild(menu);
+					menu = null;
+				}
+
+				// set a timeout before collisions can take place
+				setTimeout(function () { beginCollisions = true; console.log("collision ON"); }, 5000);
+			}
+				
+			// space after endscene or winscene will restart to menu
+			if (endscene || winscene) {
+				restartToMenu();
+					
+				// set a timeout before collisions can take place
+				setTimeout(function () { beginCollisions = true; console.log("collision ON"); }, 2000+5000);
+			}
+
+			break;
+
+	// 	case KEYCODE_W:
+	// 		if (waitForSpace) return;
+	// 		console.log("W");
+	// 		score = eInit.NUM_LIGHTS;
+	// 		break;
+	// 	case KEYCODE_L:
+	// 		if (waitForSpace) return;
+	// 		console.log("L");
+	// 		gameTime = 0;
+	// 		break;
+	// }
 }
 
 /*
@@ -623,6 +639,70 @@ function handleKeyDown(event) {
 function plusOrMinus() {
 	var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
     return plusOrMinus;
+}
+
+/*
+ *		Restart the game to menu if endscene or winscene
+ */
+function restartToMenu() {
+	console.log("RESTARTING TO MENU");
+	
+	// remove and recreate all the lights
+	for ( i = 0; i < numLights; ++i ) {
+		stage.removeChild(lightsAnimation[0]);
+		lightsAnimation[0] = null;
+		lightsAnimation.splice(0, 1);	
+	}
+	numLights = eInit.NUM_LIGHTS;
+	createLights();
+	
+	// recreate nobody if endscene
+	if ( endscene ) {
+		stage.removeChild(deathAnimation);
+		deathAnimation = null;
+		stage.addChildAt(animation, eDepths.NOBODY);
+	}
+	
+	// reset levels
+	currLevel = 1;
+	stage.addChildAt(level1, 3);
+	stage.addChildAt(level2, 3);
+	stage.addChildAt(level3, 3);
+	
+	// reset alphas
+	bgBlueAlpha = 0.05;
+	bgSunAlpha = 0.15;
+	bgBossAlpha = 0.02;
+	bgLevel1Alpha = 0.3;
+	bgLevel2Alpha = 0.3;
+	bgLevel3Alpha = 0.3;
+	nobodyAlpha = 0.30;
+	lightAlpha = 0.05;
+	anglerAlpha = 0.05;
+	backgroundBlue.alpha = bgBlueAlpha;
+	backgroundSun.alpha = bgSunAlpha;
+	backgroundBoss.alpha = bgBossAlpha;
+	level1.alpha = bgLevel1Alpha;
+	level2.alpha = bgLevel2Alpha;
+	level3.alpha = bgLevel3Alpha;
+	animation.alpha = nobodyAlpha;
+	for ( i = 0; i < numLights; ++i ) { lightsAnimation[i].alpha = lightAlpha + lightAlpha * Math.random(); }
+	for ( i = 0; i < numAnglers; ++i ) { anglersAnimation[i].alpha = anglerAlpha + anglerAlpha * Math.random(); }	
+	
+	// reset positions
+	nobodyXPos = 100;
+	nobodyYPos = 100;
+	
+	// reset timers
+	score = 0;
+	gameTime = 99;
+	
+	// reset sounds
+	createjs.Sound.stop();
+	createjs.Sound.play("backgroundMusic", {loop: -1});
+	
+	// reset flags
+	endscene = winscene = beginCollisions = false;
 }
 
 
