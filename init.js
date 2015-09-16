@@ -699,10 +699,12 @@ function restartToMenu() {
 	nobodyXSpeed = 1.75;
 	nobodyYSpeed = -2.25;
 	
-	// reset timers
+	// reset timers and text
 	score = 0;
 	gameTime = 99;
-	
+	scoreText.text = "Lights Found: " + score.toString() + "/" + eInit.NUM_LIGHTS.toString();
+	timerText.text = "Time Left: " + gameTime;
+		
 	// reset sounds
 	createjs.Sound.stop();
 	createjs.Sound.play("backgroundMusic", {loop: -1});
