@@ -697,7 +697,7 @@ function restartToMenu() {
 	nobodyXPos = 100;
 	nobodyYPos = 100;
 	nobodyXSpeed = 1.75;
-	nobodyYSpeed = -2.25;
+	nobodyYSpeed = 2.25;
 	
 	// reset timers and text
 	score = 0;
