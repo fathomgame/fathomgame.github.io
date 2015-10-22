@@ -1,3 +1,6 @@
+// reference easeljs TypeScript Definitions
+/// <reference path="typings/createjs/createjs.d.ts"/>
+
 // game attributes
 var gameFPS = 30;
 var context;
@@ -128,6 +131,9 @@ window.onload = function()
     context.canvas.width = WIDTH;
     context.canvas.height = HEIGHT;
     stage = new createjs.Stage("myCanvas");
+	
+	circle = new createjs.Shape();
+	
 
     /*
      *      Set up the Asset Queue and load sounds
@@ -154,7 +160,7 @@ window.onload = function()
     // menus
         {id: "menu", src: "assets/menu.png"},
     // sprites
-        {id: 'crossHair', src: 'assets/crosshair.png'},
+        // {id: 'crossHair', src: 'assets/crosshair.png'},
         {id: 'nobodySpritesheet', src: 'assets/firefly_spritesheet.png'},
         // {id: 'nobodySprite', src: 'assets/nobody.png'},
         {id: 'nobodyDeath', src: 'assets/dead.png'},
@@ -266,6 +272,8 @@ function queueLoaded(event)
     createjs.Ticker.setFPS(gameFPS);
     createjs.Ticker.addEventListener('tick', tickEvent);
     createjs.Ticker.addEventListener('tick', stage);
+	
+	
 }
 
 function createNobody()
