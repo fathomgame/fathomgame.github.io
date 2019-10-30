@@ -1,6 +1,9 @@
 // reference easeljs TypeScript Definitions
 /// <reference path="typings/createjs/createjs.d.ts"/>
 
+// new audio context rules
+var audio_playing = false
+
 // game attributes
 var gameFPS = 30;
 var context;
@@ -254,7 +257,7 @@ function queueLoaded(event)
     stage.addChild(timerText);
 
     // Play background sound
-    createjs.Sound.play("backgroundMusic", {loop: -1});
+//    createjs.Sound.play("backgroundMusic", {loop: -1});
 
     // Create nobody spritesheet
     nobodySpriteSheet = new createjs.SpriteSheet({
@@ -589,6 +592,13 @@ function youWin() {
 function handleKeyDown(event) {
 	if (lockScene) return;
 	if (qLoaded == false) return;
+
+  // begin playing audio if not start (new rules state user must first interact
+  // with webpage before audio can start playing)
+  if (audio_playing == false) {
+    createjs.Sound.play("backgroundMusic", {loop: -1});
+    audio_playing = true;
+  }
 
 	switch (event.keyCode) {
 		case KEYCODE_LEFT:
